@@ -9,7 +9,7 @@ impl AgentRecencyWeighted {
         AgentRecencyWeighted {
             expected_rewards: [0.0; 10],
             e: 0.1,
-            a: 0.95,
+            a: 0.05,
         }
     }
 }
