@@ -4,7 +4,8 @@ mod environment;
 mod util;
 
 fn main() {
-    let mut agent = agents::AgentSampleAverage::new();
+    use agents::agent_sample_average::AgentSampleAverage;
+    let mut agent = AgentSampleAverage::new();
     let n_steps = 1000;
     environment::run(&mut agent, n_steps);
     println!("Agent 1 (sample-average value estimate):");
