@@ -6,18 +6,18 @@ mod util;
 fn main() {
     use agents::agent_sample_average::AgentSampleAverage;
     use agents::agent_recency_weighted::AgentRecencyWeighted;
+    use agents::agent_greedy_optimistic::AgentGreedyOptimistic;
 
-    let mut agent = AgentSampleAverage::new();
-    let n_steps = 1000;
-    environment::run(&mut agent, n_steps);
-    println!("Agent 1 (sample-average value estimate):");
-    log_error(&agent.expected_rewards);
+    test_agent(&mut AgentSampleAverage::new(), "Agent 1 (sample-average value estimate):");
+    test_agent(&mut AgentRecencyWeighted::new(), "Agent 2 (recency-weighted value estimate):");
+    test_agent(&mut AgentGreedyOptimistic::new(), "Agent 3 (greedy optimistic):");
+}
 
-    let mut agent = AgentRecencyWeighted::new();
-    let n_steps = 1000;
-    environment::run(&mut agent, n_steps);
-    println!("Agent 2 (recency-weighted value estimate):");
-    log_error(&agent.expected_rewards);
+fn test_agent(agent: &mut dyn crate::agents::Agent, description: &str) {
+    let n_steps = 5000;
+    environment::run(agent, n_steps);
+    println!("{}", description);
+    log_error(&agent.get_expected_rewards());
 }
 
 fn log_error(expected_rewards: &[f32; 10]) {

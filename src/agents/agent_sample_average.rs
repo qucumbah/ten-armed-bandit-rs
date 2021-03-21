@@ -33,4 +33,8 @@ impl super::Agent for AgentSampleAverage {
         let error = reward - self.expected_rewards[chosen_action];
         self.expected_rewards[chosen_action] += coeff * error;
     }
+
+    fn get_expected_rewards(&self) -> &[f32; 10] {
+        &self.expected_rewards
+    }
 }
