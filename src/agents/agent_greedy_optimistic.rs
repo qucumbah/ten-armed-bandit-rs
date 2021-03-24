@@ -37,4 +37,8 @@ impl super::Agent for AgentGreedyOptimistic {
     fn get_expected_rewards(&self) -> &[f32; 10] {
         &self.expected_rewards
     }
+
+    fn description(&self) -> &str {
+        "Greedy optimistic agent"
+    }
 }

@@ -6,4 +6,5 @@ pub trait Agent {
     fn get_action(&self) -> usize;
     fn record_state_transition(&mut self, chosen_action: usize, reward: f32);
     fn get_expected_rewards(&self) -> &[f32; 10];
+    fn description(&self) -> &str;
 }

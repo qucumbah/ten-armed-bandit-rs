@@ -9,3 +9,10 @@ pub fn get_optimal_action(expected_rewards: &[f32; 10]) -> usize {
 
     return best_action;
 }
+
+use rand_distr::{Normal, Distribution};
+
+pub fn generate_random_normal(mean: f32) -> f32 {
+    let deviation = 1.0;
+    Normal::new(mean, deviation).unwrap().sample(&mut rand::thread_rng())
+}
