@@ -35,10 +35,7 @@ fn test_agent(
 
     let file_path = format!("{}{}", "output/", output_data_file_name);
 
-    let mut output_file = match File::open(&file_path) {
-        Ok(file) => file,
-        Err(_) => File::create(&file_path).unwrap(),
-    };
+    let mut output_file = File::create(&file_path).unwrap();
 
     for reward in rewards_history {
         output_file.write(reward.to_string().as_bytes()).expect("Should have written the output");
