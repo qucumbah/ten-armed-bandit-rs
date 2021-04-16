@@ -11,13 +11,15 @@ fn main() {
     use environments::environment_static::EnvironmentStatic;
     use environments::environment_dynamic::EnvironmentDynamic;
 
-    test_agent(&mut AgentSampleAverage::new(), &mut EnvironmentStatic::new(), "1.txt");
-    test_agent(&mut AgentRecencyWeighted::new(), &mut EnvironmentStatic::new(), "2.txt");
-    test_agent(&mut AgentGreedyOptimistic::new(), &mut EnvironmentStatic::new(), "3.txt");
+    let rng_seed = std::time::Instant::now().elapsed().as_millis() as u64;
 
-    test_agent(&mut AgentSampleAverage::new(), &mut EnvironmentDynamic::new(), "4.txt");
-    test_agent(&mut AgentRecencyWeighted::new(), &mut EnvironmentDynamic::new(), "5.txt");
-    test_agent(&mut AgentGreedyOptimistic::new(), &mut EnvironmentDynamic::new(), "6.txt");
+    test_agent(&mut AgentSampleAverage::new(), &mut EnvironmentStatic::new(rng_seed), "1.txt");
+    test_agent(&mut AgentRecencyWeighted::new(), &mut EnvironmentStatic::new(rng_seed), "2.txt");
+    test_agent(&mut AgentGreedyOptimistic::new(), &mut EnvironmentStatic::new(rng_seed), "3.txt");
+
+    test_agent(&mut AgentSampleAverage::new(), &mut EnvironmentDynamic::new(rng_seed), "4.txt");
+    test_agent(&mut AgentRecencyWeighted::new(), &mut EnvironmentDynamic::new(rng_seed), "5.txt");
+    test_agent(&mut AgentGreedyOptimistic::new(), &mut EnvironmentDynamic::new(rng_seed), "6.txt");
 }
 
 fn test_agent(
@@ -27,6 +29,13 @@ fn test_agent(
 ) {
     let n_steps = 5000;
     environment.run(agent, n_steps);
+
+    println!("Estimated rewards of {} in {}", agent.description(), environment.description());
+
+    let expected_rewards = agent.get_expected_rewards();
+    for expectation in expected_rewards {
+        println!("{}", expectation);
+    }
 
     let rewards_history = environment.get_history();
 

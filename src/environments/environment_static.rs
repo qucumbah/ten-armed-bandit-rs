@@ -1,6 +1,11 @@
+use rand::prelude::*;
+
+use crate::util;
+
 pub struct EnvironmentStatic {
     rewards: [f32; 10],
     history: Vec<f32>,
+    rng: StdRng,
 }
 
 impl super::Environment for EnvironmentStatic {
@@ -30,7 +35,7 @@ impl super::Environment for EnvironmentStatic {
 }
 
 impl EnvironmentStatic {
-    pub fn new() -> EnvironmentStatic {
+    pub fn new(seed: u64) -> EnvironmentStatic {
         EnvironmentStatic {
             rewards: [
                 0.3,
@@ -45,10 +50,11 @@ impl EnvironmentStatic {
                 0.6,
             ],
             history: Vec::new(),
+            rng: util::get_seeded_rng(seed),
         }
     }
 
-    fn environment_step(&self, action: usize) -> f32 {
-        crate::util::generate_random_normal(self.rewards[action])
+    fn environment_step(&mut self, action: usize) -> f32 {
+        return util::generate_random_normal(self.rewards[action], &mut self.rng);
     }
 }

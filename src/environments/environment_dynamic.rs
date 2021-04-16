@@ -1,6 +1,11 @@
+use rand::prelude::*;
+
+use crate::util;
+
 pub struct EnvironmentDynamic {
     rewards: [f32; 10],
     history: Vec<f32>,
+    rng: StdRng,
 }
 
 impl super::Environment for EnvironmentDynamic {
@@ -30,7 +35,7 @@ impl super::Environment for EnvironmentDynamic {
 }
 
 impl EnvironmentDynamic {
-    pub fn new() -> EnvironmentDynamic {
+    pub fn new(seed: u64) -> EnvironmentDynamic {
         EnvironmentDynamic {
             rewards: [
                 0.3,
@@ -45,16 +50,15 @@ impl EnvironmentDynamic {
                 0.6,
             ],
             history: Vec::new(),
+            rng: util::get_seeded_rng(seed),
         }
     }
 
     fn environment_step(&mut self, action: usize) -> f32 {
-        use rand::Rng;
-
         for i in 0..10 {
-            self.rewards[i] += rand::thread_rng().gen_range(-0.1..0.1);
+            self.rewards[i] += (&mut self.rng).gen_range(-1.0..1.0);
         }
 
-        return crate::util::generate_random_normal(self.rewards[action]);
+        return util::generate_random_normal(self.rewards[action], &mut self.rng);
     }
 }
